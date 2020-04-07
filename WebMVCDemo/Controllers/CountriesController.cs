@@ -149,9 +149,5 @@ namespace WebMVCDemo.Controllers
         {
             return _context.Country.Any(e => e.Id == id);
         }
-        public IActionResult Privacy()
-        {
-            return View();
-        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebMVCDemo.Controllers
@@ -11,6 +12,21 @@ namespace WebMVCDemo.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult Secret()
+        {
+            return View();
+        }
+        public IActionResult Authenticate()
+        {
+            return RedirectToAction("Fail");
+        }
+        public IActionResult Fail()
+        {
+            return View();
+            
         }
     }
 }
