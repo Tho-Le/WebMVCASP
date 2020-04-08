@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebMVCDemo.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebMVCDemo
 {
@@ -25,20 +26,35 @@ namespace WebMVCDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", config => {
-                config.Cookie.Name = "Grandmas.Cookie";
-                config.LoginPath = "/Sessions/Authenticate";
-            });
-            
+            //services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", config => {
+            //    config.Cookie.Name = "Grandmas.Cookie";
+            //    config.LoginPath = "/Sessions/Authenticate";
+            //});
+
             services.AddControllersWithViews();
 
+            //AddItentiy registers the services. This creates the infrastructure to allows the identity to communicate with the database 
+            //which allows us to create users and allow authentication and autorization.
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<LoginDbContext>();
+
+            //This configurations allows the entity framework to work with databases. In this case we want to use Microsoft SQL Server so we
+            //configure it to UseSQLServer. The get connectionstring finds the information to connect our database from the appsettings.json
             services.AddDbContext<CountryContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("CountryContext")));
+            services.AddDbContext<LoginDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("LoginDbContext"));
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //This checks if our environment is in development mode. If it is, displays a developer exception page with contains detail information
+            //about exceptions which is very useful for debugging.
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -56,6 +72,9 @@ namespace WebMVCDemo
 
             app.UseAuthorization();
 
+            //This method indicates what page we want to end up and what route we want to take.
+            //It this case, it directs the app to use a controller to route for us. In this case we direct the app to the Home Controller and to find
+            //a method called Index. In our case, the index method simply displays the index.cshtml page.
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
