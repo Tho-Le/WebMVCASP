@@ -34,7 +34,7 @@ namespace WebMVCDemo
             services.AddControllersWithViews();
 
             //AddItentiy registers the services. This creates the infrastructure to allows the identity to communicate with the database 
-            //which allows us to create users and allow authentication and autorization.
+            //which allows us to create users and allow authentication and authorization.
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<LoginDbContext>();
@@ -53,7 +53,7 @@ namespace WebMVCDemo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //This checks if our environment is in development mode. If it is, displays a developer exception page with contains detail information
+            //This checks if our environment is in development mode. If it is, displays a developer exception page which contains detail information
             //about exceptions which is very useful for debugging.
             if (env.IsDevelopment())
             {
