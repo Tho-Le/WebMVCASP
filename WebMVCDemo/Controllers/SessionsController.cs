@@ -12,22 +12,33 @@ namespace WebMVCDemo.Controllers
     public class SessionsController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public SessionsController(UserManager<IdentityUser> userManager)
+        public SessionsController(UserManager<IdentityUser> userManager
+            ,SignInManager<IdentityUser> signInManager)
         {
+           
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         
         
-        
+        [HttpPost]
         //Functionality for login into the application
         public async Task<IActionResult> Login(string username, string password)
         {
-            var user = _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(username);
             if(user != null)
             {
                 //sign the user in.
+                var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
+
+                if(signInResult.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
+
             return View();
         }
 
@@ -45,6 +56,7 @@ namespace WebMVCDemo.Controllers
             return View();
             
         }
+        [HttpPost]
         //Functionality for register a new user.
         public async Task<IActionResult> Register(string username, string password)
         {
@@ -58,9 +70,20 @@ namespace WebMVCDemo.Controllers
             if(result.Succeeded)
             {
                 //sign user here
+                var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
+
+                if (signInResult.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             return RedirectToAction("Index", "Home");
 
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
