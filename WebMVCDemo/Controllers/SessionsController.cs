@@ -22,6 +22,10 @@ namespace WebMVCDemo.Controllers
             _signInManager = signInManager;
         }
         
+        public IActionResult Login()
+        {
+            return View();
+        }
         
         [HttpPost]
         //Functionality for login into the application
@@ -55,6 +59,10 @@ namespace WebMVCDemo.Controllers
         {
             return View();
             
+        }
+        public IActionResult Register()
+        {
+            return View();
         }
         [HttpPost]
         //Functionality for register a new user.
