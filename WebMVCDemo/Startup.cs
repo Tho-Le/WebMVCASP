@@ -16,6 +16,8 @@ namespace WebMVCDemo
 {
     public class Startup
     {
+        private readonly int passwordLength = 8;
+        private readonly int uniqueCharsInPassword = 4;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,7 +39,8 @@ namespace WebMVCDemo
             //which allows us to create users and allow authentication and authorization.
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<LoginDbContext>();
+                .AddEntityFrameworkStores<LoginDbContext>()
+                .AddRoles<IdentityRole>();
 
             //This configurations allows the entity framework to work with databases. In this case we want to use Microsoft SQL Server so we
             //configure it to UseSQLServer. The get connectionstring finds the information to connect our database from the appsettings.json
@@ -47,6 +50,19 @@ namespace WebMVCDemo
             {
                 options.UseSqlServer(Configuration.GetConnectionString("LoginDbContext"));
             });
+
+            //Configuring the password to contain certain characters and to be a certain length
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = passwordLength;
+                options.Password.RequiredUniqueChars = uniqueCharsInPassword;
+                options.Password.RequireNonAlphanumeric = false;
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            });
+
+
             
         }
 

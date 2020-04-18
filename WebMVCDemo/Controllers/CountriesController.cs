@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +45,8 @@ namespace WebMVCDemo.Controllers
         }
 
         // GET: Countries/Create
+        //Only allow user with the administrator role to create new entries
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -66,6 +69,7 @@ namespace WebMVCDemo.Controllers
         }
 
         // GET: Countries/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -117,6 +121,7 @@ namespace WebMVCDemo.Controllers
         }
 
         // GET: Countries/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,6 +140,7 @@ namespace WebMVCDemo.Controllers
         }
 
         // POST: Countries/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

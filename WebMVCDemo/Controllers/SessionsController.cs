@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebMVCDemo.Data;
 
 namespace WebMVCDemo.Controllers
@@ -13,13 +14,17 @@ namespace WebMVCDemo.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ILogger _logger;
+        private readonly RoleManager<IdentityUser> _roleManager;
 
         public SessionsController(UserManager<IdentityUser> userManager
-            ,SignInManager<IdentityUser> signInManager)
+            ,SignInManager<IdentityUser> signInManager, ILoggerFactory logger)
+            
         {
-           
+            //_roleManager = roleManager;
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger.CreateLogger("WebMVCDemo.Sessions.Controllers");
         }
         
         public IActionResult Login()
@@ -39,9 +44,12 @@ namespace WebMVCDemo.Controllers
 
                 if(signInResult.Succeeded)
                 {
+                    _logger.LogInformation("User has signed in successfully");
                     return RedirectToAction("Index", "Home");
                 }
             }
+
+            _logger.LogInformation("User has unsuccessfully attempted to log in");
 
             return View();
         }
@@ -68,6 +76,12 @@ namespace WebMVCDemo.Controllers
         //Functionality for register a new user.
         public async Task<IActionResult> Register(string username, string password)
         {
+
+            var isValid = Validator.Validator.ValidatePassword(password);
+            if(!isValid)
+            {
+                return RedirectToAction("password");
+            }
             var user = new IdentityUser
             {
                 UserName = username,
@@ -80,18 +94,26 @@ namespace WebMVCDemo.Controllers
                 //sign user here
                 var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
+                if (username.Equals("administrator"))
+                {
+                    await _roleManager.CreateAsync(user);
+                }
+                await _userManager.AddToRoleAsync(user, "user");
+
                 if (signInResult.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Fail");
 
         }
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+            _logger.LogInformation("user has logged out successfull");
             return RedirectToAction("Index", "Home");
         }
+        
     }
 }
