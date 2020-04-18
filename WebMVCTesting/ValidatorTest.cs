@@ -6,7 +6,7 @@ using WebMVCDemo.Validator;
 
 namespace WebMVC.Core.Test
 {
-    public class Test
+    public class ValidatorTest
     {
         [Fact]
         public void ValidateNoUpperCaseLetterTest()
