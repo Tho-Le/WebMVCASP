@@ -51,7 +51,7 @@ namespace WebMVCDemo.Controllers
 
             _logger.LogInformation("User has unsuccessfully attempted to log in");
 
-            return View();
+            return RedirectToAction("LoginFailure");
         }
 
         [Authorize]
@@ -113,6 +113,11 @@ namespace WebMVCDemo.Controllers
             await _signInManager.SignOutAsync();
             _logger.LogInformation("user has logged out successfull");
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult LoginFailure()
+        {
+            return View();
         }
         
     }
