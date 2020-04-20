@@ -5,18 +5,24 @@
 
 <h1>Login Page</h1>
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6">
-            <img src="~/images/login_image.jpg" />
-        </div>
-        <div class="col-md-6">
-            <form action="/Sessions/Login" method="post">
-                <input type="text" required name="username" value="" />
-                <input type="text" required name="password" value="" />
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    </div>
+<div class="card">
+    <img class="card-img-top" style="width: 18rem;" src="~/images/login_image.jpg" />
 </div>
+<form action="@Url.Action("Login", "Sessions")" method="post">
+    <div class="form-group">
+        @* The for attribute bounds the label to the first id that matches it *@
+        <label for="username">Username</label>
+        @* The name attribute allows use to assess the input data when the user submits it *@
+        <input class="form-control" id="username" type="text" placeholder="Enter username" name="username" />
+        <small id="usernameHelp" class="form-text text-muted">Don't share your username with anyone</small>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" required id="password" placeholder="Password" name="password" />
+        <small id="passwordHelp" class="form-text text-muted">
+            Make sure your password is 8 characters long and has 1 number and 1 upper case letter.
+        </small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 

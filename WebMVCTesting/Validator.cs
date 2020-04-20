@@ -18,5 +18,9 @@ namespace WebMVCDemo.Validator
                 && hasMinimum8Chars.IsMatch(password);
             return isValidated;
         }
+        public static bool SamePassword(string password, string passwordConfirm)
+        {
+            return password.Equals(passwordConfirm);
+        }
     }
 }

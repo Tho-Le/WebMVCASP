@@ -11,15 +11,21 @@
     <div class="form-group">
         @* The for attribute bounds the label to the first id that matches it *@
         <label for="username">Username</label>
-        <input class="form-control" id="username" type="text" placeholder="Enter username"/>
+        @* The name attribute allows use to assess the input data when the user submits it *@
+        <input class="form-control" id="username" type="text" placeholder="Enter username" name="username"/>
         <small id="emailHelp" class="form-text text-muted">Don't share your username with anyone</small>
     </div>
     <div class="form-group">
         <label for="password">Password</label>
-        <input type="text" class="form-control" id="password" placeholder="Password" />
+        <input type="password"class="form-control" required id="password" placeholder="Password" name="password"/>
         <small id="passwordHelp" class="form-text text-muted">
             Make sure your password is 8 characters long and has 1 number and 1 upper case letter.
         </small>
+    </div>
+    <div class="form-group">
+        <label for="passwordConfirm">Confirm Password</label>
+        <input type ="password" class="form-control" required id="passwordConfirm" placeholder="Confirm Password" name="passwordConfirm"/>
+        <small id="passwordConfirmHelp" class="form-text text-muted">Confirm your password</small>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

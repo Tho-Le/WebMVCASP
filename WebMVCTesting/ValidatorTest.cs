@@ -56,5 +56,29 @@ namespace WebMVC.Core.Test
 
             Assert.Equal(expected, actual);
         }
+        [Fact]
+        public void ValidateSamePasswordTest()
+        {
+            string password1 = "ole2212PP";
+            string password2 = "ole2212PP";
+
+            bool expected = true;
+
+            bool actual = Validator.SamePassword(password1, password2);
+
+            Assert.Equal(expected, actual);
+        }
+        [Fact]
+        public void ValidateNotSamePasswordTest()
+        {
+            string password1 = "kieppp1P";
+            string password2 = "ke92hhsncM";
+
+            bool expected = false;
+
+            bool actual = Validator.SamePassword(password1, password2);
+
+            Assert.Equal(expected, actual);
+        }
     }
 }

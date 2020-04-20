@@ -74,16 +74,23 @@ namespace WebMVCDemo.Controllers
         }
         [HttpPost]
         //Functionality for register a new user.
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(string username, string password, string passwordConfirm)
         {
             _logger.LogInformation(username);
             _logger.LogInformation(password);
+            _logger.LogInformation(passwordConfirm);
 
-            var isValid = Validator.Validator.ValidatePassword(password);
-            if(!isValid)
+            bool isValid = Validator.Validator.ValidatePassword(password);
+            bool samePassword = Validator.Validator.SamePassword(password, passwordConfirm);
+            if (!samePassword)
+            {
+                return RedirectToAction("PasswordNotSame");
+            }
+            if (!isValid)
             {
                 return RedirectToAction("InvalidPassword");
             }
+
             var user = new IdentityUser
             {
                 UserName = username,
@@ -127,6 +134,10 @@ namespace WebMVCDemo.Controllers
             return View();
         }
         public IActionResult InvalidPassword()
+        {
+            return View();
+        }
+        public IActionResult PasswordNotSame()
         {
             return View();
         }
