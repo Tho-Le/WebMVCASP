@@ -4,17 +4,22 @@
 }
 
 <h1>Register</h1>
-
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6">
-            <img src="~/images/login_image.jpg" />
-        </div>
-        <div class="col-md-6">
-            <form action="/Sessions/Register" method="post">
-                <input type="text" required name="username" value="" />
-                <input type="text" required name="password" value="" />
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+<div class="card">
+    <img class="card-img-top" style="width: 18rem;" src="~/images/login_image.jpg"/>
+</div>
+<form action="@Url.Action("Register", "Sessions")" method="post">
+    <div class="form-group">
+        @* The for attribute bounds the label to the first id that matches it *@
+        <label for="username">Username</label>
+        <input class="form-control" id="username" type="text" placeholder="Enter username"/>
+        <small id="emailHelp" class="form-text text-muted">Don't share your username with anyone</small>
     </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" class="form-control" id="password" placeholder="Password" />
+        <small id="passwordHelp" class="form-text text-muted">
+            Make sure your password is 8 characters long and has 1 number and 1 upper case letter.
+        </small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

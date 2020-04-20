@@ -76,11 +76,13 @@ namespace WebMVCDemo.Controllers
         //Functionality for register a new user.
         public async Task<IActionResult> Register(string username, string password)
         {
+            _logger.LogInformation(username);
+            _logger.LogInformation(password);
 
             var isValid = Validator.Validator.ValidatePassword(password);
             if(!isValid)
             {
-                return RedirectToAction("password");
+                return RedirectToAction("InvalidPassword");
             }
             var user = new IdentityUser
             {
@@ -105,7 +107,7 @@ namespace WebMVCDemo.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-            return RedirectToAction("Fail");
+            return RedirectToAction("RegisterFail");
 
         }
         public async Task<IActionResult> Logout()
@@ -120,5 +122,13 @@ namespace WebMVCDemo.Controllers
             return View();
         }
         
+        public IActionResult RegisterFailure()
+        {
+            return View();
+        }
+        public IActionResult InvalidPassword()
+        {
+            return View();
+        }
     }
 }
