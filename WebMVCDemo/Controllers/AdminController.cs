@@ -34,7 +34,7 @@ namespace WebMVCDemo.Controllers
 
                 if(result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ListRoles", "Admin");
                 }
                 foreach(IdentityError error in result.Errors)
                 {
@@ -43,5 +43,11 @@ namespace WebMVCDemo.Controllers
             }
             return View(model);
         }
+        [HttpGet]
+        public IActionResult ListRoles()
+        {
+            var roles = _rolemanager.Roles;
+            return View(roles);
+        } 
     }
 }
