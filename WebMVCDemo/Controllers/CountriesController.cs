@@ -46,7 +46,7 @@ namespace WebMVCDemo.Controllers
 
         // GET: Countries/Create
         //Only allow user with the administrator role to create new entries
-        [Authorize]
+        //[Authorize]
         public IActionResult Create()
         {
             return View();

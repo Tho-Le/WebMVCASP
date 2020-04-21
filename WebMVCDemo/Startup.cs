@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using WebMVCDemo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebMVCDemo
 {
@@ -61,6 +62,14 @@ namespace WebMVCDemo
                 options.Password.RequireNonAlphanumeric = false;
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
             });
+
+            //services.AddMvc(options =>
+            //{
+            //    var policy = new AuthorizationPolicyBuilder()
+            //    .RequireAuthenticatedUser()
+            //    .Build();
+            //    options.Filters.Add(new AuthorizeFiler)
+            //});
 
 
             

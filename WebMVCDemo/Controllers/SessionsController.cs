@@ -27,22 +27,23 @@ namespace WebMVCDemo.Controllers
             _logger = logger.CreateLogger("WebMVCDemo.Sessions.Controllers");
         }
         
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-        
+
         [HttpPost]
         //Functionality for login into the application
         public async Task<IActionResult> Login(string username, string password)
         {
             var user = await _userManager.FindByNameAsync(username);
-            if(user != null)
+            if (user != null)
             {
                 //sign the user in.
                 var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
-                if(signInResult.Succeeded)
+                if (signInResult.Succeeded)
                 {
                     _logger.LogInformation("User has signed in successfully");
                     return RedirectToAction("Index", "Home");
