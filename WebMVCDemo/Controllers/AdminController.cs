@@ -25,6 +25,7 @@ namespace WebMVCDemo.Controllers
         {
             return View();
         }
+        [HttpPost]
         public async Task<IActionResult> CreateRole(Roles model)
         {
             if(ModelState.IsValid)
@@ -97,15 +98,50 @@ namespace WebMVCDemo.Controllers
                     var result = await _rolemanager.UpdateAsync(role);
                     if(result.Succeeded)
                     {
-                        return View("EditRoles");
+                        return View("Error");
+                        //return RedirectToAction("ListRoles");
                     }
                     foreach (IdentityError error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
                     }
+                    return View(model);
                 }
             }
+            return View("Error");
+        }
+        [HttpGet]
+        //This methods does two things. First it gets a list of users in the user database. Then based on the
+        //roleId it recieved checks whether the user is in the given role or not. If they are, then
+        //we flag them as such. This is to help us determined in the view and to display to the user
+        //whether the user is already in the role when they're are adding users to the role.
+        public async Task<IActionResult> EditUserInRole(string roleId)
+        {
+            ViewBag.roleId = roleId;
 
+            var role = await _rolemanager.FindByIdAsync(roleId);
+
+            if(role == null)
+            {
+                ViewBag.ErrorMessage($"Role with Id {role.Id} cannot be found");
+                return View("NotFound");
+            }
+            var model = new List<UserRoleViewModel>();
+
+            foreach (var user in _usermanager.Users)
+            {
+                var userRoleViewModel = new UserRoleViewModel
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                };
+                if(await _usermanager.IsInRoleAsync(user, role.Name))
+                {
+                    userRoleViewModel.IsSelected = true;
+                }
+                model.Add(userRoleViewModel);
+            }
+            return View(model);
             
         }
         
