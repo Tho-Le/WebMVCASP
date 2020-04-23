@@ -1,8 +1,8 @@
 ﻿@model List<UserRoleViewModel>
 
 @{
-    ViewData["Title"] = "EditUserInRole";
-    var roleId = ViewBag.roldId;
+
+    var roleId = ViewBag.roleId;
 }
 
 <form method="post">
@@ -11,21 +11,22 @@
             <h2>Add or remove users from the given role</h2>
         </div>
         <div class="card-body">
-            @foreach (var user in Model)
+            <!--We need to use a for loop with an indexer instead of a foreach loop
+                The Model binder uses unique names to map the values to the controller
+                action list parameter. If we use a for each loop, the names are not unique
+                and therefore the model does not bind them to the parameter. When we use the
+                parameter in the controller, the parameter is empty because we have the ASP.net
+                did not bind it. This is why we kept getting the null exception error.-->
+            @for(int i = 0; i < Model.Count; i++)
             {
-                @if (user.IsSelected)
-                {
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" checked/>
-                    </div>
-                }
-                else
-                {
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" @user.UserName />
-                        <h2 class="text-danger">@user.UserName</h2>
-                    </div>
-                }
+
+              <div class="form-check m-1">
+                  <input class="form-check-input" type="checkbox" asp-for="@Model[i].IsSelected"/>
+                  <label class="form-check-label" asp-for="@Model[i].IsSelected">
+                      @Model[i].UserName
+                  </label>
+              </div>
+                   
             }
         </div>
         <div class="card-footer">

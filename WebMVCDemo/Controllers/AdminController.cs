@@ -98,8 +98,8 @@ namespace WebMVCDemo.Controllers
                     var result = await _rolemanager.UpdateAsync(role);
                     if(result.Succeeded)
                     {
-                        return View("Error");
-                        //return RedirectToAction("ListRoles");
+                        //return View("Error");
+                        return RedirectToAction("ListRoles");
                     }
                     foreach (IdentityError error in result.Errors)
                     {
@@ -110,11 +110,11 @@ namespace WebMVCDemo.Controllers
             }
             return View("Error");
         }
-        [HttpGet]
         //This methods does two things. First it gets a list of users in the user database. Then based on the
         //roleId it recieved checks whether the user is in the given role or not. If they are, then
         //we flag them as such. This is to help us determined in the view and to display to the user
         //whether the user is already in the role when they're are adding users to the role.
+        [HttpGet]
         public async Task<IActionResult> EditUserInRole(string roleId)
         {
             ViewBag.roleId = roleId;
@@ -143,6 +143,11 @@ namespace WebMVCDemo.Controllers
             }
             return View(model);
             
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditUserInRole(List<UserRoleViewModel> model, string roleId)
+        {
+            return View();
         }
         
 

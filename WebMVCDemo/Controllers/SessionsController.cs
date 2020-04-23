@@ -104,12 +104,6 @@ namespace WebMVCDemo.Controllers
                 //sign user here
                 var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
-                if (username.Equals("administrator"))
-                {
-                    await _roleManager.CreateAsync(user);
-                }
-                await _userManager.AddToRoleAsync(user, "user");
-
                 if (signInResult.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");

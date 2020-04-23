@@ -36,12 +36,18 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Sessions" asp-action="Logout">Logout</a>
                         </li>
                         <li class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropDownMenu" data-toggle="dropdown" >Countries</button> 
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropDownMenuCountries" data-toggle="dropdown">Countries</button> 
                             @* ARIA stands for - Accessible Rich Internet Applications which help make web content 
                                more accessible to people with disabilities. This allows the develop to pass the content to another
                                assistive technologies.*@
                             <div class="dropdown-menu" aria-labelledby="dropDownMenu">
-                                <a class="dropdown-item" asp-area="" asp-controller="Countries" asp-action="Index">List Country</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Countries" asp-action="Index">Show List of Countries</a>
+                            </div>
+                        </li>
+                        <li class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropDownMenuAdmin" data-toggle="dropdown">Admin Controls</button>
+                            <div class="dropdown-menu" aria-labelledby="dropDownMenuAdmin">
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="ListRoles">Show Roles</a>
                             </div>
                         </li>
                     </ul>
