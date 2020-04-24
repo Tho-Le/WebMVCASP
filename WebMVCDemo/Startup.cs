@@ -63,6 +63,13 @@ namespace WebMVCDemo
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
             });
 
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Sessions/Login";
+                options.Cookie.Name = "MyCookie";
+            });
+
             //services.AddMvc(options =>
             //{
             //    var policy = new AuthorizationPolicyBuilder()
@@ -72,7 +79,8 @@ namespace WebMVCDemo
             //});
 
 
-            
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,7 +103,10 @@ namespace WebMVCDemo
 
             app.UseRouting();
 
+            //You forgot to add this which is why the user was never authenticated
+            app.UseAuthentication();
             app.UseAuthorization();
+            
 
             //This method indicates what page we want to end up and what route we want to take.
             //It this case, it directs the app to use a controller to route for us. In this case we direct the app to the Home Controller and to find

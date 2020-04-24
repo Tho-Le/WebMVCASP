@@ -115,7 +115,7 @@ namespace WebMVCDemo.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("user has logged out successfull");
+            _logger.LogInformation("user has logged out successfully");
             return RedirectToAction("Index", "Home");
         }
 

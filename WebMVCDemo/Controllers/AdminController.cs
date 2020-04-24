@@ -8,6 +8,20 @@ using WebMVCDemo.Models;
 
 namespace WebMVCDemo.Controllers
 {
+    /*
+     * Controller and Razor pages work with data that comes from HTTP request.
+     * For example perhaps the route data may have some data for us to work with
+     * or form fields have values that we need. Trying to retrieve this and convert
+     * them to the proper types would be tedious and error prone. In ASP.NET, model
+     * biding attempts to automate this process.
+     * Example
+     * Public ActionResult GetById(int id, bool dogsOnly)
+     * Model binding sees that the first parameter is and id. It looks through the
+     * available sources in the HTTP request and finds a valid value. Once it does,
+     * it will then attempt to convert it to the correct type if possible. It will then
+     * do the same thing for dogsOnly
+     *
+     */
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> _rolemanager;
@@ -23,27 +37,27 @@ namespace WebMVCDemo.Controllers
         [HttpGet]
         public IActionResult CreateRole()
         {
+            //Reshaprer tool. The brown/red? underline means that the view exists for this action exists.
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> CreateRole(Roles model)
         {
-            if(ModelState.IsValid)
-            {
-                IdentityRole identityRole = new IdentityRole
-                {
-                    Name = model.RoleName
-                };
-                var result = await _rolemanager.CreateAsync(identityRole);
+            if (!ModelState.IsValid) return View("Error");
 
-                if(result.Succeeded)
-                {
-                    return RedirectToAction("ListRoles", "Admin");
-                }
-                foreach(IdentityError error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+            IdentityRole identityRole = new IdentityRole
+            {
+                Name = model.RoleName
+            };
+            var result = await _rolemanager.CreateAsync(identityRole);
+
+            if(result.Succeeded)
+            {
+                return RedirectToAction("ListRoles", "Admin");
+            }
+            foreach(IdentityError error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
             }
             return View(model);
         }
@@ -123,7 +137,7 @@ namespace WebMVCDemo.Controllers
 
             if(role == null)
             {
-                ViewBag.ErrorMessage($"Role with Id {role.Id} cannot be found");
+                ViewBag.ErrorMessage($"Role with Id {roleId} cannot be found");
                 return View("NotFound");
             }
             var model = new List<UserRoleViewModel>();
@@ -147,8 +161,40 @@ namespace WebMVCDemo.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUserInRole(List<UserRoleViewModel> model, string roleId)
         {
-            return View();
+            if (!ModelState.IsValid) return View("Error");
+
+            var role = await _rolemanager.FindByIdAsync(roleId);
+
+            IdentityResult result = null;
+
+            if (role == null)
+            {
+                ViewBag.ErrorMessage($"The User with Id {roleId} could not be found");
+                return View("Error");
+            }
+
+            foreach (var userRole in model)
+            {
+                var user = await _usermanager.FindByIdAsync(userRole.UserId);
+                if (userRole.IsSelected && !(await _usermanager.IsInRoleAsync(user, role.Name)))
+                {
+                    result = await _usermanager.AddToRoleAsync(user,role.Name);
+                }
+                else if (!userRole.IsSelected && await _usermanager.IsInRoleAsync(user, role.Name))
+                {
+                    result = await _usermanager.RemoveFromRoleAsync(user, role.Name);
+                }
+
+                if (!result.Succeeded)
+                {
+                    ViewBag.ErrorMessage($"The user could not be remove from role");
+                    return View("NotFound");
+                }
+            }
+
+            return RedirectToAction("EditRoles", new {Id = roleId});
         }
+
         
 
         

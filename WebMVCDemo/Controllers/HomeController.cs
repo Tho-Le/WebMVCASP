@@ -11,15 +11,16 @@ namespace WebMVCDemo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger("WebMVCDemo.Home.Controllers");
         }
 
         public IActionResult Index()
         {
+            _logger.LogInformation($"The user is authenticated = {User.Identity.IsAuthenticated}");
             return View();
         }
 

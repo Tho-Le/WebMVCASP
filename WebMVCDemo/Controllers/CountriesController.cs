@@ -11,6 +11,7 @@ using WebMVCDemo.Models;
 
 namespace WebMVCDemo.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CountriesController : Controller
     {
         private readonly CountryContext _context;
@@ -46,7 +47,7 @@ namespace WebMVCDemo.Controllers
 
         // GET: Countries/Create
         //Only allow user with the administrator role to create new entries
-        //[Authorize]
+        
         public IActionResult Create()
         {
             return View();
@@ -55,6 +56,7 @@ namespace WebMVCDemo.Controllers
         // POST: Countries/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,name,population,density,sqaureMiles")] Country country)
@@ -69,7 +71,7 @@ namespace WebMVCDemo.Controllers
         }
 
         // GET: Countries/Edit/5
-        [Authorize]
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,6 +90,7 @@ namespace WebMVCDemo.Controllers
         // POST: Countries/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,name,population,density,sqaureMiles")] Country country)
@@ -120,8 +123,7 @@ namespace WebMVCDemo.Controllers
             return View(country);
         }
 
-        // GET: Countries/Delete/5
-        [Authorize]
+        // GET: Countries/Delete//
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,7 +142,6 @@ namespace WebMVCDemo.Controllers
         }
 
         // POST: Countries/Delete/5
-        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
